@@ -504,7 +504,9 @@ func (s *server) handleFeedback(w http.ResponseWriter, r *http.Request) {
 
 func (s *server) handleStatus(w http.ResponseWriter, r *http.Request) {
 	h := info(r).House
-	s.update(func() { h.Steps.Health = true })
+	// A house that was approved at once never needs to poll the request; asking /status counts
+	// as the status step too.
+	s.update(func() { h.Steps.Health = true; h.Steps.StatusAsk = true })
 	jsonOut(w, 200, grannskap.Status{Online: true, Version: "testhus-1", Status: "Öppet för tester dygnet runt.", Time: time.Now().UTC().Format(time.RFC3339)})
 }
 
