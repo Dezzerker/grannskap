@@ -107,6 +107,12 @@ func main() {
 		log.Fatal(err)
 	}
 	s.client = grannskap.NewClient(s.url, s.d.PrivateKey)
+	log.Printf("testhuset lyssnar på %s som %s", *addr, s.url)
+	log.Fatal(http.ListenAndServe(*addr, s.routes()))
+}
+
+// routes builds the handler; the test uses it in-process.
+func (s *server) routes() *http.ServeMux {
 	s.tmpl = template.Must(template.New("page").Funcs(template.FuncMap{"since": since}).Parse(pageHTML))
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /{$}", s.handleIndex)
@@ -121,8 +127,7 @@ func main() {
 	mux.HandleFunc("GET "+grannskap.PathStatus, s.auth(false, s.handleStatus))
 	mux.HandleFunc("POST "+grannskap.PathStatus, s.auth(false, s.handleStatusPush))
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("ok")) })
-	log.Printf("testhuset lyssnar på %s som %s", *addr, s.url)
-	log.Fatal(http.ListenAndServe(*addr, mux))
+	return mux
 }
 
 // ---- storage ----
