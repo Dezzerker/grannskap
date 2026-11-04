@@ -1,0 +1,57 @@
+{
+  "cases": [
+    {
+      "name": "discovery-not-signed-but-status-get",
+      "method": "GET",
+      "path": "/api/grannskap/v1/forfragan/12",
+      "timestamp": 1762228800,
+      "body": "",
+      "canonical": "GET\n/api/grannskap/v1/forfragan/12\n1762228800\ne3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "signature": "Teeb3ro2yoDOIwGvZcJZPlgzUBslp59HQu7oHkaqj6PtneAnNvhEnMdZHHuxwJAPn2+EBww7umjlq3jLj0y8Cg=="
+    },
+    {
+      "name": "request-post",
+      "method": "POST",
+      "path": "/api/grannskap/v1/forfragan",
+      "timestamp": 1762228800,
+      "body": "{\"message\":\"Hej!\",\"services_wanted\":[\"wiki\"],\"token_for_you\":\"abcdefghijklmnopqrstuvwxyz0123456789ABCDEF\"}",
+      "canonical": "POST\n/api/grannskap/v1/forfragan\n1762228800\n992440cf7ef2847088e9764d720f67ea59f5430b7261f420411a65252446c8ae",
+      "body_sha256": "992440cf7ef2847088e9764d720f67ea59f5430b7261f420411a65252446c8ae",
+      "signature": "3O9yrDsE0kNZgYsyI0/BgxvAgQXvextQt5JaEefE/JgNCJooNYBKI/eHTsSl7hJ9wR9AKPJpDNTIDC3ep0PHBg=="
+    },
+    {
+      "name": "wiki-get-with-token",
+      "method": "GET",
+      "path": "/api/grannskap/v1/wiki",
+      "timestamp": 1762228860,
+      "body": "",
+      "canonical": "GET\n/api/grannskap/v1/wiki\n1762228860\ne3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "signature": "ltJKc4Q8BeOnp3Z5vCHE72d99EM1w7soxZIPrHSJgKbuNC46Awgoqo3FOdlxgC8BQEzOf6nN0IqUel0PmM/wCg=="
+    },
+    {
+      "name": "feedback-post-utf8",
+      "method": "POST",
+      "path": "/api/grannskap/v1/feedback",
+      "timestamp": 1762228920,
+      "body": "{\"text\":\"Snyggt årshjul! ÅÄÖ åäö\"}",
+      "canonical": "POST\n/api/grannskap/v1/feedback\n1762228920\n51e0b04832d0a06f5780b08638df78b673770f1715b1f7695ba6760d03c363e8",
+      "body_sha256": "51e0b04832d0a06f5780b08638df78b673770f1715b1f7695ba6760d03c363e8",
+      "signature": "+eU0k8YSetNnTV/lPqVN3FmpTTxbHLqPE+nvnpqRSfYvDaFAKvTb7KWvieVxOojbi4jDt4CalzVh0/91G6lIBQ=="
+    },
+    {
+      "name": "status-get",
+      "method": "get",
+      "path": "/api/grannskap/v1/status",
+      "timestamp": 1762228980,
+      "body": "",
+      "canonical": "GET\n/api/grannskap/v1/status\n1762228980\ne3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "signature": "kTlYVpnAxXIqX+62oPJEY3rw+3PfBHtCrTjymM5mWN3FgcyzvlGsuN/Fpc66BH1OqUnLBhy3T8WmMmBKFQ1OAg=="
+    }
+  ],
+  "note": "Fast nyckelpar för tester. Signaturen är ed25519 över canonical (METOD, SÖKVÄG, TIDSSTÄMPEL och hex(sha256(kropp)) åtskilda av radbrytning). Använd ALDRIG den här nyckeln på ett riktigt hus.",
+  "private_key": "ZcSNTEOTCsiIImC5xQ1J/zHBm45vW4HgpZCyQNnM13/oNpDCJ5VzYI9IrgGSQ+RY+h26JngKMIcfrWxQ7s4IAw==",
+  "public_key": "6DaQwieVc2CPSK4BkkPkWPoduiZ4CjCHH61sUO7OCAM="
+}

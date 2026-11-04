@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Dezzerker/grannskap/schemas/grannskap.schema.json",
+  "title": "Grannskap v1 – meddelanden",
+  "description": "JSON-scheman för varje meddelande i Grannskap. Mottagare ignorerar okända fält; avsändare håller sig till dessa.",
+  "$defs": {
+    "address": { "type": "string", "pattern": "^https?://[a-z0-9.-]+(:[0-9]+)?$", "maxLength": 200 },
+    "kind": { "type": "string", "enum": ["hushall", "byggnad", "foretag", "forening", "annat"] },
+    "serviceKey": { "type": "string", "enum": ["wiki", "hushall", "vanner", "feedback", "status", "recept", "filer", "backup", "kalas", "schema", "bokning"] },
+    "house": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 80 },
+        "url": { "$ref": "#/$defs/address" },
+        "kind": { "$ref": "#/$defs/kind" }
+      },
+      "required": ["name", "url"]
+    },
+    "discovery": {
+      "type": "object",
+      "properties": {
+        "grannskap": { "type": "string", "const": "1" },
+        "kind": { "$ref": "#/$defs/kind" },
+        "parent": { "$ref": "#/$defs/address" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "description": { "type": "string", "maxLength": 600 },
+        "url": { "$ref": "#/$defs/address" },
+        "public_key": { "type": "string", "pattern": "^[A-Za-z0-9+/]{43}=$", "description": "base64 av en 32 byte ed25519 publik nyckel" },
+        "discoverable": { "type": "boolean" },
+        "services": {
+          "type": "array", "maxItems": 20,
+          "items": { "type": "object", "properties": { "key": { "$ref": "#/$defs/serviceKey" }, "version": { "type": "integer", "minimum": 1 } }, "required": ["key", "version"] }
+        },
+        "endpoints": { "type": "object", "additionalProperties": { "type": "string", "maxLength": 200 } },
+        "rate_limit_per_minute": { "type": "integer", "minimum": 1 },
+        "docs": { "type": "string", "maxLength": 200 },
+        "version": { "type": "string", "maxLength": 40 },
+        "wiki_updated": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "maxLength": 140 },
+        "time": { "type": "string", "format": "date-time" },
+        "status_min_interval_seconds": { "type": "integer", "minimum": 0 }
+      },
+      "required": ["grannskap", "name", "url", "public_key"]
+    },
+    "request": {
+      "type": "object",
+      "properties": {
+        "message": { "type": "string", "maxLength": 2000 },
+        "services_wanted": { "type": "array", "items": { "$ref": "#/$defs/serviceKey" }, "maxItems": 20 },
+        "token_for_you": { "type": "string", "minLength": 32, "maxLength": 200 }
+      },
+      "required": ["message", "services_wanted", "token_for_you"]
+    },
+    "requestReply": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "minimum": 1 },
+        "status": { "type": "string", "enum": ["inkommen", "van", "avslagen", "pausad"] },
+        "token_for_you": { "type": "string", "maxLength": 200 },
+        "services": { "type": "array", "items": { "$ref": "#/$defs/serviceKey" } },
+        "message": { "type": "string", "maxLength": 2000 }
+      },
+      "required": ["id", "status"]
+    },
+    "wiki": {
+      "type": "object",
+      "properties": {
+        "house": { "$ref": "#/$defs/house" },
+        "sections": {
+          "type": "array", "maxItems": 30,
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": { "type": "string", "maxLength": 40 },
+              "title": { "type": "string", "maxLength": 120 },
+              "body": { "type": "string", "maxLength": 6000 },
+              "tags": { "type": "array", "items": { "type": "string", "maxLength": 40 }, "maxItems": 8 }
+            },
+            "required": ["key", "title", "body"]
+          }
+        }
+      },
+      "required": ["house", "sections"]
+    },
+    "household": {
+      "type": "object",
+      "properties": {
+        "house": { "$ref": "#/$defs/house" },
+        "members": {
+          "type": "array", "maxItems": 50,
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string", "maxLength": 80 },
+              "role": { "type": "string", "enum": ["vuxen", "barn"] },
+              "age": { "type": "integer", "minimum": 0, "maximum": 130 },
+              "birthday": { "type": "string", "pattern": "^([0-9]{4}-)?[0-9]{2}-[0-9]{2}$" },
+              "wishlist_url": { "type": "string", "pattern": "^https://", "maxLength": 300 }
+            }
+          }
+        }
+      },
+      "required": ["house", "members"]
+    },
+    "friends": {
+      "type": "object",
+      "properties": {
+        "house": { "$ref": "#/$defs/house" },
+        "friends": {
+          "type": "array", "maxItems": 100,
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string", "maxLength": 80 },
+              "url": { "$ref": "#/$defs/address" },
+              "kind": { "$ref": "#/$defs/kind" },
+              "description": { "type": "string", "maxLength": 600 }
+            },
+            "required": ["name", "url"]
+          }
+        }
+      },
+      "required": ["house", "friends"]
+    },
+    "feedback": {
+      "type": "object",
+      "properties": { "text": { "type": "string", "minLength": 1, "maxLength": 5000 } },
+      "required": ["text"]
+    },
+    "status": {
+      "type": "object",
+      "properties": {
+        "online": { "type": "boolean" },
+        "version": { "type": "string", "maxLength": 40 },
+        "status": { "type": "string", "maxLength": 140 },
+        "wiki_updated": { "type": "string", "format": "date-time" },
+        "time": { "type": "string", "format": "date-time" },
+        "min_interval_seconds": { "type": "integer", "minimum": 0 }
+      },
+      "required": ["online", "time"]
+    },
+    "tooSoon": {
+      "type": "object",
+      "properties": { "error": { "type": "string" }, "retry_after_seconds": { "type": "integer", "minimum": 0 } },
+      "required": ["error", "retry_after_seconds"]
+    },
+    "error": {
+      "type": "object",
+      "properties": { "error": { "type": "string", "maxLength": 200 } },
+      "required": ["error"]
+    }
+  }
+}

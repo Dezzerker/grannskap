@@ -1,0 +1,32 @@
+{
+  "grannskap": "1",
+  "kind": "hushall",
+  "name": "Exempelhuset",
+  "description": "Ett hushålls egen hemsida: hönshus, inköp, recept, årshjul och gårdsprojekt.",
+  "url": "https://hus.example.se",
+  "public_key": "MCowBQYDK2VwAyEAexempelnyckelbase64ersattmed32byte=",
+  "discoverable": true,
+  "services": [
+    { "key": "wiki", "version": 1 },
+    { "key": "hushall", "version": 1 },
+    { "key": "vanner", "version": 1 },
+    { "key": "feedback", "version": 1 },
+    { "key": "status", "version": 1 }
+  ],
+  "endpoints": {
+    "request": "/api/grannskap/v1/forfragan",
+    "status": "/api/grannskap/v1/forfragan/{id}",
+    "wiki": "/api/grannskap/v1/wiki",
+    "household": "/api/grannskap/v1/hushall",
+    "friends": "/api/grannskap/v1/vanner",
+    "feedback": "/api/grannskap/v1/feedback",
+    "health": "/api/grannskap/v1/status"
+  },
+  "rate_limit_per_minute": 30,
+  "docs": "https://hus.example.se/grannskap",
+  "version": "2026-11-04.5aa89e",
+  "wiki_updated": "2026-11-04T03:25:14Z",
+  "status": "Bygger Grannskap. Hör av er!",
+  "time": "2026-11-04T04:06:38Z",
+  "status_min_interval_seconds": 600
+}
