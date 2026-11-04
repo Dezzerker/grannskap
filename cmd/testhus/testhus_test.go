@@ -34,13 +34,14 @@ func TestWholeHandshake(t *testing.T) {
 	}))
 	defer fake.Close()
 
-	s := &server{path: filepath.Join(t.TempDir(), "data.json"), url: "http://127.0.0.1:1", hits: map[string][]time.Time{}}
+	s := &server{path: filepath.Join(t.TempDir(), "data.json"), hits: map[string][]time.Time{}}
 	if err := s.load(); err != nil {
 		t.Fatal(err)
 	}
-	s.client = grannskap.NewClient(s.url, s.d.PrivateKey)
 	th := httptest.NewServer(s.routes())
 	defer th.Close()
+	s.url = th.URL // the discovery document must name the address it is served from
+	s.client = grannskap.NewClient(s.url, s.d.PrivateKey)
 
 	c := grannskap.NewClient(fake.URL, priv)
 	ctx := context.Background()
